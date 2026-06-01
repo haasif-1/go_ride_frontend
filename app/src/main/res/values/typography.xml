@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.GoRide.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/gray_900</item>
+    </style>
+
+    <style name="TextAppearance.GoRide.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/gray_700</item>
+    </style>
+
+    <style name="TextAppearance.GoRide.Button" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
