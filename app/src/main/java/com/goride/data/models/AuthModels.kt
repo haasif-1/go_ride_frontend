@@ -8,24 +8,44 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    @SerializedName("access") val accessToken: String,
-    @SerializedName("refresh") val refreshToken: String,
-    @SerializedName("user") val user: UserResponse
+    @SerializedName("success") val success: Boolean,
+    @SerializedName("message") val message: String?,
+    @SerializedName("data") val data: LoginData?
+)
+
+data class LoginData(
+    @SerializedName("access") val access: String?,
+    @SerializedName("refresh") val refresh: String?,
+    @SerializedName("user") val user: UserResponse?
 )
 
 data class RegisterRequest(
-    @SerializedName("full_name") val fullName: String,
-    @SerializedName("email") val email: String,
-    @SerializedName("password") val password: String
+    @SerializedName("email")
+    val email: String,
+
+    @SerializedName("password")
+    val password: String,
+
+    @SerializedName("confirm_password")
+    val confirmPassword: String,
+
+    @SerializedName("role")
+    val role: String = "USER"
 )
 
 data class RegisterResponse(
-    @SerializedName("message") val message: String,
-    @SerializedName("user") val user: UserResponse
+    @SerializedName("success") val success: Boolean,
+    @SerializedName("message") val message: String?,
+    @SerializedName("data") val data: UserResponse?
 )
 
 data class UserResponse(
-    @SerializedName("id") val id: Int,
-    @SerializedName("full_name") val fullName: String,
-    @SerializedName("email") val email: String
+    @SerializedName("id")
+    val id: String,
+
+    @SerializedName("email")
+    val email: String,
+
+    @SerializedName("role")
+    val role: String
 )

@@ -33,13 +33,12 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>() {
 
     private fun setupListeners() {
         binding.btnSignUp.setOnClickListener {
-            val fullName = binding.etFullName.text.toString().trim()
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
-            if (validateInput(fullName, email, password, confirmPassword)) {
-                viewModel.register(fullName, email, password)
+            if (validateInput(email, password, confirmPassword)) {
+                viewModel.register(email, password, confirmPassword)
             }
         }
 
@@ -48,15 +47,8 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>() {
         }
     }
 
-    private fun validateInput(fullName: String, email: String, password: String, confirmPassword: String): Boolean {
+    private fun validateInput(email: String, password: String, confirmPassword: String): Boolean {
         var isValid = true
-
-        if (fullName.isEmpty()) {
-            binding.tilFullName.error = "Full name is required"
-            isValid = false
-        } else {
-            binding.tilFullName.error = null
-        }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.tilEmail.error = "Valid email is required"
@@ -94,7 +86,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding>() {
                 Toast.makeText(requireContext(), "Registration Successful. Please Login.", Toast.LENGTH_LONG).show()
                 findNavController().navigateUp()
             }.onFailure {
-                Toast.makeText(requireContext(), "Registration Failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Registration Failed: ${it.message}", Toast.LENGTH_LONG).show()
             }
         }
     }

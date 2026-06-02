@@ -70,7 +70,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>() {
 
         viewModel.userProfile.observe(viewLifecycleOwner) { result ->
             result.onSuccess { user ->
-                binding.tvUserName.text = user.fullName
+                binding.tvUserName.text = user.email.substringBefore("@")
                 binding.tvUserEmail.text = user.email
             }.onFailure {
                 Toast.makeText(requireContext(), "Error fetching profile: ${it.message}", Toast.LENGTH_SHORT).show()
