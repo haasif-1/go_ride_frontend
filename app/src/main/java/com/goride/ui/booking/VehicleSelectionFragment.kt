@@ -1,5 +1,6 @@
 package com.goride.ui.booking
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,12 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.MapView
+import org.maplibre.android.maps.OnMapReadyCallback
 import com.goride.R
 import com.goride.base.BaseFragment
 import com.goride.data.api.RetrofitClient
@@ -22,7 +22,8 @@ import com.goride.databinding.FragmentVehicleSelectionBinding
 
 class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>(), OnMapReadyCallback {
 
-    private var googleMap: GoogleMap? = null
+    private var mapLibreMap: MapLibreMap? = null
+    private var mapView: MapView? = null
     private var selectedVehicle: VehicleModel? = null
 
     private val viewModel: BookingViewModel by viewModels {
@@ -33,16 +34,17 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         return FragmentVehicleSelectionBinding.inflate(inflater, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mapView = binding.root.findViewById(R.id.mapView)
+        mapView?.onCreate(savedInstanceState)
+        mapView?.getMapAsync(this)
+    }
+
     override fun setupUI() {
-        setupMap()
         setupRecyclerView()
         setupListeners()
         observeViewModel()
-    }
-
-    private fun setupMap() {
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
     }
 
     private fun setupRecyclerView() {
@@ -90,10 +92,50 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         }
     }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-        val pickup = LatLng(-6.2088, 106.8456)
-        googleMap?.addMarker(MarkerOptions().position(pickup).title("Pickup"))
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(pickup, 15f))
+    override fun onMapReady(map: MapLibreMap) {
+        mapLibreMap = map
+
+        map.setStyle("https://tiles.openfreemap.org/styles/liberty") {
+            val pickup = LatLng(-6.2088, 106.8456)
+            // Use Double (15.0) for zoom instead of Float (15f)
+            mapLibreMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(pickup, 15.0))
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView?.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView?.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView?.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView?.onSaveInstanceState(outState)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView?.onLowMemory()
+    }
+
+    override fun onDestroyView() {
+        mapView?.onDestroy()
+        mapView = null
+        mapLibreMap = null
+        super.onDestroyView()
     }
 }

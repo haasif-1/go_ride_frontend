@@ -98,6 +98,18 @@
         android:name="com.goride.ui.booking.LocationConfirmationFragment"
         android:label="LocationConfirmationFragment"
         tools:layout="@layout/fragment_location_confirmation">
+        <argument
+            android:name="destinationName"
+            app:argType="string" />
+        <argument
+            android:name="destinationLat"
+            app:argType="string" />
+        <argument
+            android:name="destinationLon"
+            app:argType="string" />
+        <argument
+            android:name="destinationFullAddress"
+            app:argType="string" />
         <action
             android:id="@+id/action_locationConfirmationFragment_to_vehicleSelectionFragment"
             app:destination="@id/vehicleSelectionFragment" />

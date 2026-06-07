@@ -11,6 +11,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import com.goride.data.api.NominatimApiService
+import android.util.Log
 
 object RetrofitClient {
 
@@ -21,20 +23,25 @@ object RetrofitClient {
     }
 
     private val authInterceptor = Interceptor { chain ->
-        val token = if (::dataStoreManager.isInitialized) {
-            runBlocking { dataStoreManager.authToken.first() }
-        } else null
-
-        val request = chain.request().newBuilder()
-        if (!token.isNullOrEmpty()) {
-            request.addHeader("Authorization", "Bearer $token")
-        }
-        chain.proceed(request.build())
+        chain.proceed(chain.request())
     }
-
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+    private val nominatimClient = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+
+            val request = chain.request()
+                .newBuilder()
+                .header(
+                    "User-Agent",
+                    "GoRide Android App"
+                )
+                .build()
+
+            chain.proceed(request)
+        }
+        .build()
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
@@ -51,6 +58,13 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+    private val nominatimRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://nominatim.openstreetmap.org/")
+            .client(nominatimClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     val authApiService: AuthApiService by lazy {
         retrofit.create(AuthApiService::class.java)
@@ -58,5 +72,8 @@ object RetrofitClient {
 
     val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
+    }
+    val nominatimApi: NominatimApiService by lazy {
+        nominatimRetrofit.create(NominatimApiService::class.java)
     }
 }
