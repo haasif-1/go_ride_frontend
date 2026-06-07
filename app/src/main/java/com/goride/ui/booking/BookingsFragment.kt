@@ -48,13 +48,18 @@ class BookingsFragment : BaseFragment<FragmentBookingsBinding>() {
             result.onSuccess { ride ->
                 if (ride != null) {
                     binding.cardActiveRide.visibility = View.VISIBLE
+                    // driverName returns null in current API — shows "Searching..."
                     binding.tvActiveDriver.text = "Driver: ${ride.driverName ?: "Searching..."}"
                     binding.tvActiveStatus.text = ride.status
+                    // pickupAddress / destinationAddress are coordinate strings until
+                    // the backend adds reverse-geocoded address fields
                     binding.tvActivePickup.text = "Pickup: ${ride.pickupAddress}"
-                    binding.tvActiveDest.text = "Drop: ${ride.destinationAddress}"
+                    binding.tvActiveDest.text   = "Drop: ${ride.destinationAddress}"
                 } else {
                     binding.cardActiveRide.visibility = View.GONE
                 }
+            }.onFailure {
+                binding.cardActiveRide.visibility = View.GONE
             }
         }
 

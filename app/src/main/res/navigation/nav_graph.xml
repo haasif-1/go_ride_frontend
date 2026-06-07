@@ -120,6 +120,24 @@
         android:name="com.goride.ui.booking.VehicleSelectionFragment"
         android:label="VehicleSelectionFragment"
         tools:layout="@layout/fragment_vehicle_selection">
+        <argument
+            android:name="pickupLat"
+            app:argType="string" />
+        <argument
+            android:name="pickupLng"
+            app:argType="string" />
+        <argument
+            android:name="destinationLat"
+            app:argType="string" />
+        <argument
+            android:name="destinationLng"
+            app:argType="string" />
+        <argument
+            android:name="destinationName"
+            app:argType="string" />
+        <argument
+            android:name="destinationFullAddress"
+            app:argType="string" />
         <action
             android:id="@+id/action_vehicleSelectionFragment_to_bookingSuccessFragment"
             app:destination="@id/bookingSuccessFragment"
@@ -131,6 +149,24 @@
         android:name="com.goride.ui.booking.BookingSuccessFragment"
         android:label="BookingSuccessFragment"
         tools:layout="@layout/fragment_booking_success">
+        <argument
+            android:name="rideId"
+            app:argType="string" />
+        <argument
+            android:name="status"
+            app:argType="string" />
+        <argument
+            android:name="vehicleType"
+            app:argType="string" />
+        <argument
+            android:name="fare"
+            app:argType="float" />
+        <argument
+            android:name="distance"
+            app:argType="float" />
+        <argument
+            android:name="duration"
+            app:argType="integer" />
         <action
             android:id="@+id/action_bookingSuccessFragment_to_homeFragment"
             app:destination="@id/homeFragment"

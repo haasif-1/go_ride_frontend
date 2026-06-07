@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,10 @@ import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.OnMapReadyCallback
 import java.util.Locale
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.goride.data.api.RetrofitClient
+import com.goride.utils.PolylineDecoder
 
 class LocationConfirmationFragment : BaseFragment<FragmentLocationConfirmationBinding>(), OnMapReadyCallback {
 
@@ -145,7 +150,20 @@ class LocationConfirmationFragment : BaseFragment<FragmentLocationConfirmationBi
             findNavController().navigateUp()
         }
         binding.btnConfirm.setOnClickListener {
-            findNavController().navigate(R.id.action_locationConfirmationFragment_to_vehicleSelectionFragment)
+            val pickup = currentLocation
+            if (pickup != null) {
+                val action = LocationConfirmationFragmentDirections.actionLocationConfirmationFragmentToVehicleSelectionFragment(
+                    pickupLat = pickup.latitude.toString(),
+                    pickupLng = pickup.longitude.toString(),
+                    destinationLat = args.destinationLat,
+                    destinationLng = args.destinationLon,
+                    destinationName = args.destinationName,
+                    destinationFullAddress = args.destinationFullAddress
+                )
+                findNavController().navigate(action)
+            } else {
+                Toast.makeText(requireContext(), "Location not resolved yet", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -170,27 +188,96 @@ class LocationConfirmationFragment : BaseFragment<FragmentLocationConfirmationBi
 
         if (currentLocation != null) {
             map.addMarker(MarkerOptions().position(currentLocation!!).title("Pickup"))
-
-            map.addPolyline(
-                PolylineOptions()
-                    .add(currentLocation)
-                    .add(destination)
-                    .color(Color.BLUE)
-                    .width(4f)
-            )
-
-            val bounds = LatLngBounds.Builder()
-                .include(currentLocation!!)
-                .include(destination)
-                .build()
-
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngBounds(bounds, 150)
-            )
+            fetchRoute(currentLocation!!, destination)
         } else {
             map.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(destination, 14.0)
             )
+        }
+    }
+
+    private fun fetchRoute(pickup: LatLng, destination: LatLng) {
+        val map = mapLibreMap ?: return
+
+        // Coordinates format for OSRM: {lng1},{lat1};{lng2},{lat2}
+        val coords = "${pickup.longitude},${pickup.latitude};${destination.longitude},${destination.latitude}"
+
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.osrmApi.getRoute(coords)
+                if (response.isSuccessful && response.body() != null) {
+                    val routeResponse = response.body()!!
+                    if (routeResponse.code == "Ok" && routeResponse.routes.isNotEmpty()) {
+                        val route = routeResponse.routes[0]
+                        val decodedPoints = PolylineDecoder.decode(route.geometry)
+                        drawRouteOnMap(decodedPoints, pickup, destination)
+                    } else {
+                        drawStraightRoute(pickup, destination)
+                    }
+                } else {
+                    drawStraightRoute(pickup, destination)
+                }
+            } catch (e: Exception) {
+                drawStraightRoute(pickup, destination)
+            }
+        }
+    }
+
+    private fun drawRouteOnMap(points: List<LatLng>, pickup: LatLng, destination: LatLng) {
+        val map = mapLibreMap ?: return
+        map.clear()
+
+        // Re-add markers
+        map.addMarker(MarkerOptions().position(destination).title("Destination"))
+        map.addMarker(MarkerOptions().position(pickup).title("Pickup"))
+
+        if (points.isNotEmpty()) {
+            map.addPolyline(
+                PolylineOptions()
+                    .addAll(points)
+                    .color(Color.BLUE)
+                    .width(4f)
+            )
+
+            // Adjust camera bounds to fit the whole route
+            val boundsBuilder = LatLngBounds.Builder()
+            for (point in points) {
+                boundsBuilder.include(point)
+            }
+            try {
+                val bounds = boundsBuilder.build()
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
+            } catch (e: Exception) {
+                // Fallback to straight-line bounds on failure
+                drawStraightRoute(pickup, destination)
+            }
+        } else {
+            drawStraightRoute(pickup, destination)
+        }
+    }
+
+    private fun drawStraightRoute(pickup: LatLng, destination: LatLng) {
+        val map = mapLibreMap ?: return
+        map.clear()
+        map.addMarker(MarkerOptions().position(destination).title("Destination"))
+        map.addMarker(MarkerOptions().position(pickup).title("Pickup"))
+
+        map.addPolyline(
+            PolylineOptions()
+                .add(pickup)
+                .add(destination)
+                .color(Color.BLUE)
+                .width(4f)
+        )
+
+        try {
+            val bounds = LatLngBounds.Builder()
+                .include(pickup)
+                .include(destination)
+                .build()
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
+        } catch (e: Exception) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(destination, 14.0))
         }
     }
 

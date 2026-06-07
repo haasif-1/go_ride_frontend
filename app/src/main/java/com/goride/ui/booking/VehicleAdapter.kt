@@ -59,4 +59,10 @@ class VehicleAdapter(
     }
 
     override fun getItemCount() = vehicles.size
+
+    fun updateVehicles(newVehicles: List<VehicleModel>) {
+        this.vehicles = newVehicles
+        this.selectedPosition = 0
+        notifyDataSetChanged()
+    }
 }

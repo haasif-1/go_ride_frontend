@@ -20,6 +20,8 @@ class AuthViewModel(
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
+    private val TAG = "AuthViewModel"
+
     private val _loginResult = MutableLiveData<Result<LoginResponse>>()
     val loginResult: LiveData<Result<LoginResponse>> = _loginResult
 
@@ -32,41 +34,68 @@ class AuthViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val TAG = "AuthViewModel"
+    // ── Login ──────────────────────────────────────────────────────────────────
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val response = repository.login(LoginRequest(email, password))
-                Log.d(TAG, "LOGIN_HTTP_CODE: ${response.code()}")
-                
+                Log.d(TAG, "LOGIN — HTTP ${response.code()}")
+
                 if (response.isSuccessful && response.body() != null) {
                     val body = response.body()!!
-                    Log.d(TAG, "LOGIN_RESPONSE: $body")
-                    
-                    // Corrected field mapping to match backend JSON: body.data.access
-                    val accessToken = body.data?.access
-                    val userEmail = body.data?.user?.email
-                    
-                    Log.d(TAG, "LOGIN_TOKEN: $accessToken")
-                    Log.d(TAG, "LOGIN_USER: ${body.data?.user}")
+                    Log.d(TAG, "LOGIN — body.success=${body.success} | message=${body.message}")
+                    Log.d(TAG, "LOGIN — data=${body.data}")
 
-                    if (!accessToken.isNullOrEmpty() && !userEmail.isNullOrEmpty()) {
-                        dataStoreManager.saveSession(accessToken, userEmail)
-                        _loginResult.value = Result.success(body)
-                    } else {
-                        Log.e(TAG, "LOGIN_ERROR: Missing session data. Access: $accessToken, Email: $userEmail")
-                        _loginResult.value = Result.failure(Exception("Invalid session data received"))
+                    // Extract ONLY the access token — never the refresh token
+                    val accessToken = body.data?.access
+                    val userEmail   = body.data?.user?.email
+
+                    Log.e("AUTH_AUDIT", "LOGIN_ACCESS=$accessToken")
+                    Log.d(TAG, "LOGIN — accessToken=${
+                        if (accessToken.isNullOrBlank()) "MISSING" else "${accessToken.take(30)}…"
+                    }")
+                    Log.d(TAG, "LOGIN — userEmail=${userEmail ?: "MISSING"}")
+
+                    when {
+                        !body.success -> {
+                            // Backend returned 2xx but reported failure in the body
+                            val msg = body.message ?: "Login failed"
+                            Log.e(TAG, "LOGIN — backend reported failure: $msg")
+                            _loginResult.value = Result.failure(Exception(msg))
+                        }
+                        accessToken.isNullOrBlank() -> {
+                            Log.e(TAG, "LOGIN — access token is missing from response")
+                            _loginResult.value = Result.failure(
+                                Exception("Server did not return an access token")
+                            )
+                        }
+                        userEmail.isNullOrBlank() -> {
+                            Log.e(TAG, "LOGIN — user email is missing from response")
+                            _loginResult.value = Result.failure(
+                                Exception("Server did not return user information")
+                            )
+                        }
+                        else -> {
+                            Log.e("AUTH_AUDIT", "SAVING_TOKEN=$accessToken")
+                            // ✅ Save ONLY the access token to DataStore
+                            dataStoreManager.saveSession(accessToken, userEmail)
+                            Log.d(TAG, "LOGIN — session saved successfully")
+
+                            // Verify what was actually persisted
+                            Log.d(TAG, "LOGIN — verifying persisted token…")
+                            _loginResult.value = Result.success(body)
+                        }
                     }
                 } else {
                     val errorStr = response.errorBody()?.string()
-                    Log.e(TAG, "LOGIN_ERROR_BODY: $errorStr")
-                    val errorMsg = parseError(errorStr) ?: response.message()
+                    Log.e(TAG, "LOGIN — error body: $errorStr")
+                    val errorMsg = parseError(errorStr) ?: response.message().ifEmpty { "Login failed" }
                     _loginResult.value = Result.failure(Exception(errorMsg))
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "LOGIN_EXCEPTION: ${e.message}", e)
+                Log.e(TAG, "LOGIN — exception: ${e.message}", e)
                 _loginResult.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
@@ -74,24 +103,28 @@ class AuthViewModel(
         }
     }
 
+    // ── Register ───────────────────────────────────────────────────────────────
+
     fun register(email: String, password: String, confirmPassword: String) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = repository.register(RegisterRequest(email, password, confirmPassword))
-                Log.d(TAG, "REGISTER_HTTP_CODE: ${response.code()}")
-                
+                val response = repository.register(
+                    RegisterRequest(email, password, confirmPassword)
+                )
+                Log.d(TAG, "REGISTER — HTTP ${response.code()}")
+
                 if (response.isSuccessful && response.body() != null) {
-                    Log.d(TAG, "REGISTER_RESPONSE: ${response.body()}")
+                    Log.d(TAG, "REGISTER — success: ${response.body()}")
                     _registerResult.value = Result.success(response.body()!!)
                 } else {
                     val errorStr = response.errorBody()?.string()
-                    Log.e(TAG, "REGISTER_ERROR_BODY: $errorStr")
-                    val errorMsg = parseError(errorStr) ?: response.message()
+                    Log.e(TAG, "REGISTER — error body: $errorStr")
+                    val errorMsg = parseError(errorStr) ?: response.message().ifEmpty { "Registration failed" }
                     _registerResult.value = Result.failure(Exception(errorMsg))
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "REGISTER_EXCEPTION: ${e.message}", e)
+                Log.e(TAG, "REGISTER — exception: ${e.message}", e)
                 _registerResult.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
@@ -99,27 +132,7 @@ class AuthViewModel(
         }
     }
 
-    private fun parseError(errorBody: String?): String? {
-        if (errorBody == null) return null
-        return try {
-            val jsonObject = JSONObject(errorBody)
-            when {
-                jsonObject.has("message") -> jsonObject.getString("message")
-                jsonObject.has("detail") -> jsonObject.getString("detail")
-                jsonObject.has("email") -> {
-                    val emailError = jsonObject.optJSONArray("email")
-                    if (emailError != null) "Email: " + emailError.getString(0) else "Email error"
-                }
-                jsonObject.has("non_field_errors") -> {
-                    val nfError = jsonObject.optJSONArray("non_field_errors")
-                    if (nfError != null) nfError.getString(0) else "Authentication error"
-                }
-                else -> errorBody
-            }
-        } catch (e: Exception) {
-            errorBody
-        }
-    }
+    // ── Profile ────────────────────────────────────────────────────────────────
 
     fun getProfile() {
         viewModelScope.launch {
@@ -129,13 +142,37 @@ class AuthViewModel(
                 if (response.isSuccessful && response.body() != null) {
                     _userProfile.value = Result.success(response.body()!!)
                 } else {
-                    _userProfile.value = Result.failure(Exception(response.message()))
+                    Log.e(TAG, "PROFILE — HTTP ${response.code()}: ${response.message()}")
+                    _userProfile.value = Result.failure(
+                        Exception("Failed to load profile (${response.code()})")
+                    )
                 }
             } catch (e: Exception) {
+                Log.e(TAG, "PROFILE — exception: ${e.message}", e)
                 _userProfile.value = Result.failure(e)
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    // ── Error parser ───────────────────────────────────────────────────────────
+
+    private fun parseError(errorBody: String?): String? {
+        if (errorBody == null) return null
+        return try {
+            val json = JSONObject(errorBody)
+            when {
+                json.has("message")          -> json.getString("message")
+                json.has("detail")           -> json.getString("detail")
+                json.has("non_field_errors") -> json.optJSONArray("non_field_errors")
+                    ?.getString(0) ?: "Authentication error"
+                json.has("email")            -> "Email: " + (json.optJSONArray("email")
+                    ?.getString(0) ?: "unknown error")
+                else                         -> errorBody
+            }
+        } catch (e: Exception) {
+            errorBody
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goride.data.models.RideData
 import com.goride.data.models.RideResponse
 import com.goride.data.repository.RideHistoryRepository
 import kotlinx.coroutines.launch
@@ -23,22 +24,31 @@ class RideHistoryViewModel(private val repository: RideHistoryRepository) : View
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Fetch active ride
+                // ── Active ride ────────────────────────────────────────────────
                 val activeResponse = repository.getActiveRide()
-                if (activeResponse.isSuccessful) {
-                    _activeRide.value = Result.success(activeResponse.body())
+                if (activeResponse.isSuccessful && activeResponse.body() != null) {
+                    val body = activeResponse.body()!!
+                    // Unwrap envelope: data is nullable (null = no active ride)
+                    _activeRide.value = Result.success(if (body.success) body.data else null)
                 } else {
+                    // 404 or similar means no active ride — not an error for the UI
                     _activeRide.value = Result.success(null)
                 }
 
-                // Fetch history
+                // ── Ride history ───────────────────────────────────────────────
                 val historyResponse = repository.getRideHistory()
-                if (historyResponse.isSuccessful) {
-                    _rideHistory.value = Result.success(historyResponse.body() ?: emptyList())
+                if (historyResponse.isSuccessful && historyResponse.body() != null) {
+                    // History endpoint returns List<RideApiResponse>; extract each data object
+                    val rideList: List<RideData> = historyResponse.body()!!
+                        .mapNotNull { envelope -> if (envelope.success) envelope.data else null }
+                    _rideHistory.value = Result.success(rideList)
                 } else {
-                    _rideHistory.value = Result.failure(Exception(historyResponse.message()))
+                    _rideHistory.value = Result.failure(
+                        Exception("Failed to load history (${historyResponse.code()})")
+                    )
                 }
             } catch (e: Exception) {
+                _activeRide.value = Result.success(null)
                 _rideHistory.value = Result.failure(e)
             } finally {
                 _isLoading.value = false

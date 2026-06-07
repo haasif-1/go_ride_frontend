@@ -14,19 +14,20 @@ class RideHistoryAdapter(private val rides: List<RideResponse>) :
     inner class ViewHolder(private val binding: ItemRideHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(ride: RideResponse) {
-            binding.tvRideId.text = "#RID${ride.id}"
-            binding.tvDate.text = ride.createdAt
-            binding.tvPickup.text = ride.pickupAddress
-            binding.tvDest.text = ride.destinationAddress
-            binding.tvFare.text = ride.fare
-            binding.tvVehicleType.text = ride.vehicleName ?: "Vehicle"
-            binding.chipStatus.text = ride.status
+            // Use the compat helper that produces "#A7B5C8D2"
+            binding.tvRideId.text    = ride.displayId
+            binding.tvDate.text      = ride.createdAt
+            binding.tvPickup.text    = ride.pickupAddress
+            binding.tvDest.text      = ride.destinationAddress
+            binding.tvFare.text      = ride.fareFormatted
+            binding.tvVehicleType.text = ride.vehicleName
+            binding.chipStatus.text  = ride.status
 
             val statusColor = when (ride.status.uppercase()) {
                 "COMPLETED" -> R.color.success
                 "CANCELLED" -> R.color.error
                 "REQUESTED" -> R.color.warning
-                else -> R.color.primary
+                else        -> R.color.primary
             }
             binding.chipStatus.chipBackgroundColor = ColorStateList.valueOf(
                 binding.root.context.getColor(statusColor)

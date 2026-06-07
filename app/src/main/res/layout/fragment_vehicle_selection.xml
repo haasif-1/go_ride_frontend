@@ -56,6 +56,7 @@
                     app:tint="@color/gray_500" />
 
                 <TextView
+                    android:id="@+id/tvDestinationName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -140,6 +141,7 @@
                         android:src="@drawable/ic_route"
                         app:tint="@color/gray_500" />
                     <TextView
+                        android:id="@+id/tvDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -160,6 +162,7 @@
                         android:src="@drawable/ic_clock"
                         app:tint="@color/gray_500" />
                     <TextView
+                        android:id="@+id/tvDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -180,6 +183,7 @@
                         android:src="@drawable/ic_wallet"
                         app:tint="@color/gray_500" />
                     <TextView
+                        android:id="@+id/tvFare"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
