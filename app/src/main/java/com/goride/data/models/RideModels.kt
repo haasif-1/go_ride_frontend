@@ -30,8 +30,8 @@ data class RideApiResponse(
  * The "data" object inside every ride response.
  * Fields are derived from the verified backend payload.
  *
- * Legacy alias kept so that BookingsFragment / RideHistoryAdapter /
- * RideHistoryViewModel continue to compile without churn.
+ * Supports both /request/ (contains coordinates and timestamps) and
+ * /active/ (contains driver details and may omit coordinates/timestamps).
  */
 data class RideData(
     @SerializedName("id")               val id: String,
@@ -40,11 +40,18 @@ data class RideData(
     @SerializedName("fare")             val fare: Double,
     @SerializedName("distance")         val distance: Double,
     @SerializedName("duration")         val duration: Int,
-    @SerializedName("pickup_lat")       val pickupLat: String,
-    @SerializedName("pickup_lng")       val pickupLng: String,
-    @SerializedName("destination_lat")  val destinationLat: String,
-    @SerializedName("destination_lng")  val destinationLng: String,
-    @SerializedName("requested_at")     val requestedAt: String
+    
+    // Nullable because they are absent in /api/rides/active/ responses
+    @SerializedName("pickup_lat")       val pickupLat: String?,
+    @SerializedName("pickup_lng")       val pickupLng: String?,
+    @SerializedName("destination_lat")  val destinationLat: String?,
+    @SerializedName("destination_lng")  val destinationLng: String?,
+    @SerializedName("requested_at")     val requestedAt: String?,
+
+    // Driver/Vehicle details present in active ride responses
+    @SerializedName("driver_name")      val driverName: String?,
+    @SerializedName("driver_phone")     val driverPhone: String?,
+    @SerializedName("vehicle_plate")    val vehiclePlate: String?
 ) {
     // ── Compatibility helpers for the Bookings / History screens ───────────────
     // These computed properties map old RideResponse field names to new RideData
@@ -58,19 +65,16 @@ data class RideData(
     val fareFormatted: String get() = "Rs. %.0f".format(fare)
 
     /** Pickup coordinates displayed as a fallback address */
-    val pickupAddress: String get() = "$pickupLat, $pickupLng"
+    val pickupAddress: String get() = if (pickupLat != null && pickupLng != null) "$pickupLat, $pickupLng" else "N/A"
 
     /** Destination coordinates displayed as a fallback address */
-    val destinationAddress: String get() = "$destinationLat, $destinationLng"
+    val destinationAddress: String get() = if (destinationLat != null && destinationLng != null) "$destinationLat, $destinationLng" else "N/A"
 
     /** Vehicle type formatted for display */
     val vehicleName: String get() = vehicleType
 
-    /** No driver info in this version of the API */
-    val driverName: String? get() = null
-
     /** Alias for requestedAt so history adapter can use createdAt */
-    val createdAt: String get() = requestedAt
+    val createdAt: String get() = requestedAt ?: ""
 }
 
 // ── Backward-compatibility typealias ──────────────────────────────────────────

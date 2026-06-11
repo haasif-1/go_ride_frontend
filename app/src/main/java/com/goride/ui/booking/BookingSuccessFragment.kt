@@ -25,6 +25,11 @@ class BookingSuccessFragment : BaseFragment<FragmentBookingSuccessBinding>() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.pop_in)
         binding.ivSuccess.startAnimation(animation)
 
+        // ── Driver Information ──────────────────────────────────────────────────
+        binding.tvDriverName.text = args.driverName
+        binding.tvDriverVehicle.text = args.driverVehicle
+        binding.tvDriverPlate.text = args.driverPlate
+
         // ── Ride summary ────────────────────────────────────────────────────────
         binding.tvRideId.text      = "Ride #${args.rideId.take(8).uppercase(Locale.ROOT)}"
         binding.tvStatus.text      = args.status

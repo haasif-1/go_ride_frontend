@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="24dp"
-        android:paddingTop="48dp"
+        android:paddingTop="40dp"
         android:paddingBottom="32dp">
 
         <!-- Success icon -->
         <ImageView
             android:id="@+id/ivSuccess"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_success_check"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,10 +27,10 @@
             android:id="@+id/tvSuccessTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:text="Booking Successful!"
             android:textColor="@color/gray_900"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,197 +41,254 @@
             android:id="@+id/tvSuccessDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Your ride has been requested. A driver will be assigned shortly."
+            android:text="Your ride is confirmed. Your driver is on the way."
             android:textColor="@color/gray_700"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSuccessTitle" />
 
-        <!-- ── Ride detail card ─────────────────────────────────────────────── -->
+        <!-- ── Driver Information Card ────────────────────────────────────── -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardRideDetails"
+            android:id="@+id/cardDriverDetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            app:cardBackgroundColor="@color/white"
+            android:layout_marginTop="24dp"
+            app:cardBackgroundColor="@color/gray_50"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSuccessDesc"
             app:strokeColor="@color/gray_200"
             app:strokeWidth="1dp">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/ivDriverAvatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_driver_avatar"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_person"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/tvDriverName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="--"
+                    android:textColor="@color/gray_900"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivDriverAvatar"
+                    app:layout_constraintTop_toTopOf="@id/ivDriverAvatar" />
+
+                <TextView
+                    android:id="@+id/tvDriverVehicle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textColor="@color/gray_600"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@id/ivDriverAvatar"
+                    app:layout_constraintEnd_toStartOf="@id/tvDriverPlate"
+                    app:layout_constraintStart_toStartOf="@id/tvDriverName"
+                    app:layout_constraintTop_toBottomOf="@id/tvDriverName" />
+
+                <TextView
+                    android:id="@+id/tvDriverPlate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_fare_badge"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="--"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/ivDriverAvatar"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Ride detail card ─────────────────────────────────────────────── -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRideDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardDriverDetails"
+            app:strokeColor="@color/gray_100"
+            app:strokeWidth="1dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
                 <!-- Ride ID -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawablePadding="8dp"
                         android:text="Ride ID"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvRideId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/gray_900"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_200" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_100" />
 
                 <!-- Status -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Status"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/primary"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_200" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_100" />
 
                 <!-- Vehicle Type -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Vehicle"
+                        android:text="Type"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvVehicleType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/gray_900"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_200" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_100" />
 
                 <!-- Fare -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Fare"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvFare"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/gray_900"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_200" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_100" />
 
                 <!-- Distance -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Distance"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/gray_900"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_200" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_100" />
 
                 <!-- ETA -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="ETA"
                         android:textColor="@color/gray_500"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
                     <TextView
                         android:id="@+id/tvDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
                         android:textColor="@color/gray_900"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 

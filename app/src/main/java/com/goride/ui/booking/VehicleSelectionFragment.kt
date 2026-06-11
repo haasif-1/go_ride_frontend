@@ -2,6 +2,7 @@ package com.goride.ui.booking
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,8 +61,6 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         binding.tvDestinationName.text = args.destinationName
     }
 
-    // ── RecyclerView ───────────────────────────────────────────────────────────
-
     private fun setupRecyclerView() {
         val initialVehicles = listOf(
             VehicleModel(1, "Normal",  "Rs. 100", "-- min", "4 Seats", R.drawable.ic_car_placeholder, isPopular = true),
@@ -77,20 +76,30 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         }
     }
 
-    // ── Listeners ──────────────────────────────────────────────────────────────
-
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
         binding.btnSelectRide.setOnClickListener {
-            val pickupLat = args.pickupLat.toDoubleOrNull() ?: 0.0
-            val pickupLng = args.pickupLng.toDoubleOrNull() ?: 0.0
-            val destLat   = args.destinationLat.toDoubleOrNull() ?: 0.0
-            val destLng   = args.destinationLng.toDoubleOrNull() ?: 0.0
+            val rawPickupLat = args.pickupLat.toDoubleOrNull() ?: 0.0
+            val rawPickupLng = args.pickupLng.toDoubleOrNull() ?: 0.0
+            val rawDestLat   = args.destinationLat.toDoubleOrNull() ?: 0.0
+            val rawDestLng   = args.destinationLng.toDoubleOrNull() ?: 0.0
 
-            // Disable button immediately to prevent double-taps
+            val pickupLat = roundCoordinate(rawPickupLat)
+            val pickupLng = roundCoordinate(rawPickupLng)
+            val destLat   = roundCoordinate(rawDestLat)
+            val destLng   = roundCoordinate(rawDestLng)
+
+            val vehicleType = selectedVehicle?.name?.uppercase(Locale.ROOT) ?: "NORMAL"
+
+            Log.d("VehicleSelection", "Original Pickup: $rawPickupLat, $rawPickupLng")
+            Log.d("VehicleSelection", "Rounded Pickup: $pickupLat, $pickupLng")
+            Log.d("VehicleSelection", "Original Dest: $rawDestLat, $rawDestLng")
+            Log.d("VehicleSelection", "Rounded Dest: $destLat, $destLng")
+            Log.d("VehicleSelection", "vehicleType: $vehicleType")
+
             binding.btnSelectRide.isEnabled = false
             binding.btnSelectRide.text = "Requesting…"
 
@@ -99,12 +108,18 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
                 pickupLng   = pickupLng,
                 destLat     = destLat,
                 destLng     = destLng,
-                vehicleType = selectedVehicle?.name?.uppercase(Locale.ROOT) ?: "NORMAL"
+                vehicleType = vehicleType
             )
         }
     }
 
-    // ── ViewModel observers ────────────────────────────────────────────────────
+    private fun roundCoordinate(value: Double): Double {
+        return try {
+            String.format(Locale.US, "%.6f", value).toDouble()
+        } catch (e: Exception) {
+            value
+        }
+    }
 
     private fun observeViewModel() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -115,25 +130,21 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         viewModel.rideBookingResult.observe(viewLifecycleOwner) { result ->
             result.onSuccess { rideData ->
                 val action = VehicleSelectionFragmentDirections
-                    .actionVehicleSelectionFragmentToBookingSuccessFragment(
-                        rideId      = rideData.id,
-                        status      = rideData.status,
+                    .actionVehicleSelectionFragmentToDriverSelectionFragment(
+                        rideId = rideData.id,
                         vehicleType = rideData.vehicleType,
-                        fare        = rideData.fare.toFloat(),
-                        distance    = rideData.distance.toFloat(),
-                        duration    = rideData.duration
+                        fare = rideData.fare.toFloat(),
+                        distance = rideData.distance.toFloat(),
+                        duration = rideData.duration
                     )
                 findNavController().navigate(action)
             }.onFailure { error ->
-                // Re-enable button so the user can retry
                 binding.btnSelectRide.isEnabled = true
                 binding.btnSelectRide.text = "Select Ride"
                 Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
             }
         }
     }
-
-    // ── Map ───────────────────────────────────────────────────────────────────
 
     override fun onMapReady(map: MapLibreMap) {
         mapLibreMap = map
@@ -176,7 +187,7 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
             results
         )
         val distanceMeters = results[0].toDouble()
-        val durationSeconds = distanceMeters / 11.1   // ~40 km/h city speed
+        val durationSeconds = distanceMeters / 11.1
         updateTripDetails(distanceMeters, durationSeconds)
         drawStraightRoute(pickup, destination)
     }
@@ -188,7 +199,6 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         binding.tvDistance.text = String.format(Locale.getDefault(), "%.1f km", distanceKm)
         binding.tvDuration.text = String.format(Locale.getDefault(), "%d min", durationMin)
 
-        // Fare formula: baseFare + (distanceKm * perKm)
         val updatedVehicles = listOf(
             VehicleModel(1, "Normal",  "Rs. %.0f".format(Locale.US, 100.0 + distanceKm * 30.0), "${durationMin} min",     "4 Seats", R.drawable.ic_car_placeholder, isPopular = true),
             VehicleModel(2, "Economy", "Rs. %.0f".format(Locale.US, 150.0 + distanceKm * 40.0), "${durationMin + 2} min", "5 Seats", R.drawable.ic_car_placeholder),
@@ -199,8 +209,6 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
         binding.tvFare.text = selectedVehicle?.price
         (binding.rvVehicles.adapter as? VehicleAdapter)?.updateVehicles(updatedVehicles)
     }
-
-    // ── Route drawing ─────────────────────────────────────────────────────────
 
     private fun drawRouteOnMap(points: List<LatLng>, pickup: LatLng, destination: LatLng) {
         val map = mapLibreMap ?: return
@@ -239,8 +247,6 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(destination, 14.0))
         }
     }
-
-    // ── MapView lifecycle ─────────────────────────────────────────────────────
 
     override fun onStart()  { super.onStart();  mapView?.onStart()  }
     override fun onResume() { super.onResume(); mapView?.onResume() }

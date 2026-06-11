@@ -139,9 +139,48 @@
             android:name="destinationFullAddress"
             app:argType="string" />
         <action
-            android:id="@+id/action_vehicleSelectionFragment_to_bookingSuccessFragment"
-            app:destination="@id/bookingSuccessFragment"
-            app:popUpTo="@id/homeFragment" />
+            android:id="@+id/action_vehicleSelectionFragment_to_driverSelectionFragment"
+            app:destination="@id/driverSelectionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/driverSelectionFragment"
+        android:name="com.goride.ui.booking.DriverSelectionFragment"
+        android:label="DriverSelectionFragment"
+        tools:layout="@layout/fragment_driver_selection">
+        <argument
+            android:name="rideId"
+            app:argType="string" />
+        <argument
+            android:name="vehicleType"
+            app:argType="string" />
+        <argument
+            android:name="fare"
+            app:argType="float" />
+        <argument
+            android:name="distance"
+            app:argType="float" />
+        <argument
+            android:name="duration"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_driverSelectionFragment_to_bookingSuccessFragment"
+            app:destination="@id/bookingSuccessFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rideTrackingFragment"
+        android:name="com.goride.ui.booking.RideTrackingFragment"
+        android:label="RideTrackingFragment"
+        tools:layout="@layout/fragment_ride_tracking">
+        <argument
+            android:name="rideId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_rideTrackingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -167,6 +206,18 @@
         <argument
             android:name="duration"
             app:argType="integer" />
+        <argument
+            android:name="driverName"
+            android:defaultValue="--"
+            app:argType="string" />
+        <argument
+            android:name="driverVehicle"
+            android:defaultValue="--"
+            app:argType="string" />
+        <argument
+            android:name="driverPlate"
+            android:defaultValue="--"
+            app:argType="string" />
         <action
             android:id="@+id/action_bookingSuccessFragment_to_homeFragment"
             app:destination="@id/homeFragment"
