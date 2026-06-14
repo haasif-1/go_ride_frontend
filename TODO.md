@@ -1,0 +1,5 @@
+- [ ] Implement missing helper methods in DriverTrackingFragment.kt (pre-start and post-start route drawing + pickup/destination LatLng getters)
+- [ ] Ensure pre-start shows ONLY Driver→Pickup route; post-start clears and shows ONLY Pickup→Destination route
+- [x] Ensure ride flow buttons and navigation/rating sheet remain unchanged
+- [ ] Remove compile errors (missing methods)
+- [ ] Run Gradle assembleDebug until BUILD SUCCESSFUL

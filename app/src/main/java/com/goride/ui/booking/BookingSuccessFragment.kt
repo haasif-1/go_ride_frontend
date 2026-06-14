@@ -38,8 +38,23 @@ class BookingSuccessFragment : BaseFragment<FragmentBookingSuccessBinding>() {
         binding.tvDistance.text    = "%.1f km".format(Locale.US, args.distance.toDouble())
         binding.tvDuration.text    = "${args.duration} min"
 
-        binding.btnBackHome.setOnClickListener {
-            findNavController().navigate(R.id.action_bookingSuccessFragment_to_homeFragment)
+        binding.btnTrackDriver.setOnClickListener {
+            val action = BookingSuccessFragmentDirections
+                .actionBookingSuccessFragmentToDriverTrackingFragment(
+                    rideId = args.rideId,
+                    vehicleType = args.vehicleType,
+                    fare = args.fare,
+                    distance = args.distance,
+                    duration = args.duration,
+                    driverName = args.driverName,
+                    driverVehicle = args.driverVehicle,
+                    driverPlate = args.driverPlate,
+                    pickupLat = args.pickupLat,
+                    pickupLng = args.pickupLng,
+                    destinationLat = args.destinationLat,
+                    destinationLng = args.destinationLng
+                )
+            findNavController().navigate(action)
         }
     }
 }

@@ -135,7 +135,11 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
                         vehicleType = rideData.vehicleType,
                         fare = rideData.fare.toFloat(),
                         distance = rideData.distance.toFloat(),
-                        duration = rideData.duration
+                        duration = rideData.duration,
+                        pickupLat = args.pickupLat,
+                        pickupLng = args.pickupLng,
+                        destinationLat = args.destinationLat,
+                        destinationLng = args.destinationLng
                     )
                 findNavController().navigate(action)
             }.onFailure { error ->

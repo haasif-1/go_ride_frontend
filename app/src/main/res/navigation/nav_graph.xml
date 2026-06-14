@@ -163,9 +163,69 @@
         <argument
             android:name="duration"
             app:argType="integer" />
+        <argument
+            android:name="pickupLat"
+            app:argType="string" />
+        <argument
+            android:name="pickupLng"
+            app:argType="string" />
+        <argument
+            android:name="destinationLat"
+            app:argType="string" />
+        <argument
+            android:name="destinationLng"
+            app:argType="string" />
         <action
             android:id="@+id/action_driverSelectionFragment_to_bookingSuccessFragment"
             app:destination="@id/bookingSuccessFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/driverTrackingFragment"
+        android:name="com.goride.ui.booking.DriverTrackingFragment"
+        android:label="DriverTrackingFragment"
+        tools:layout="@layout/fragment_driver_tracking">
+        <argument
+            android:name="rideId"
+            app:argType="string" />
+        <argument
+            android:name="vehicleType"
+            app:argType="string" />
+        <argument
+            android:name="fare"
+            app:argType="float" />
+        <argument
+            android:name="distance"
+            app:argType="float" />
+        <argument
+            android:name="duration"
+            app:argType="integer" />
+        <argument
+            android:name="driverName"
+            app:argType="string" />
+        <argument
+            android:name="driverVehicle"
+            app:argType="string" />
+        <argument
+            android:name="driverPlate"
+            app:argType="string" />
+        <argument
+            android:name="pickupLat"
+            app:argType="string" />
+        <argument
+            android:name="pickupLng"
+            app:argType="string" />
+        <argument
+            android:name="destinationLat"
+            app:argType="string" />
+        <argument
+            android:name="destinationLng"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_driverTrackingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -218,6 +278,21 @@
             android:name="driverPlate"
             android:defaultValue="--"
             app:argType="string" />
+        <argument
+            android:name="pickupLat"
+            app:argType="string" />
+        <argument
+            android:name="pickupLng"
+            app:argType="string" />
+        <argument
+            android:name="destinationLat"
+            app:argType="string" />
+        <argument
+            android:name="destinationLng"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_bookingSuccessFragment_to_driverTrackingFragment"
+            app:destination="@id/driverTrackingFragment" />
         <action
             android:id="@+id/action_bookingSuccessFragment_to_homeFragment"
             app:destination="@id/homeFragment"

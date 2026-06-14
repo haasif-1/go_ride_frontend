@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="route_completed">#9E9E9E</color>
+    <color name="route_remaining">#2E7D32</color>
     <color name="primary">#16A34A</color>
     <color name="primary_dark">#15803D</color>
     <color name="primary_light">#DCFCE7</color>
@@ -10,6 +12,7 @@
     <color name="gray_50">#F9FAFB</color>
     <color name="gray_100">#F3F4F6</color>
     <color name="gray_200">#E5E7EB</color>
+    <color name="gray_300">#D1D5DB</color>
     <color name="gray_500">#6B7280</color>
     <color name="gray_600">#4B5563</color>
     <color name="gray_700">#374151</color>
@@ -18,4 +21,7 @@
     <color name="error">#EF4444</color>
     <color name="success">#22C55E</color>
     <color name="warning">#F59E0B</color>
+
+    <color name="route_primary">#16A34A</color>
+    <color name="route_outline">#0F5132</color>
 </resources>

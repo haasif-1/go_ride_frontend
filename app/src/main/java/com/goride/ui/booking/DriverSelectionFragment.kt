@@ -78,14 +78,18 @@ class DriverSelectionFragment : Fragment() {
                 val action = DriverSelectionFragmentDirections
                     .actionDriverSelectionFragmentToBookingSuccessFragment(
                         rideId = args.rideId,
-                        status = "ACCEPTED",
+                        status = "CONFIRMED",
                         vehicleType = args.vehicleType,
                         fare = selectedDriver.fare,
                         distance = args.distance,
                         duration = args.duration,
                         driverName = selectedDriver.name,
                         driverVehicle = selectedDriver.vehicle,
-                        driverPlate = selectedDriver.plateNumber
+                        driverPlate = selectedDriver.plateNumber,
+                        pickupLat = args.pickupLat,
+                        pickupLng = args.pickupLng,
+                        destinationLat = args.destinationLat,
+                        destinationLng = args.destinationLng
                     )
                 findNavController().navigate(action)
             }
