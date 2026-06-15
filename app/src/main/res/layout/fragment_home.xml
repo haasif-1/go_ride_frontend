@@ -11,6 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Top Gradient Overlay for readability -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/bg_top_gradient" />
+
+    <!-- Safety Card - Refined -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSafety"
         android:layout_width="match_parent"
@@ -19,7 +26,8 @@
         android:layout_marginTop="60dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="4dp"
-        app:strokeWidth="0dp">
+        app:strokeColor="#F1F5F9"
+        app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,22 +36,26 @@
 
             <ImageView
                 android:id="@+id/ivShield"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/circle_white"
+                android:backgroundTint="#DCFCE7"
+                android:padding="8dp"
                 android:src="@drawable/ic_shield"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/success" />
+                app:tint="@color/primary" />
 
             <TextView
                 android:id="@+id/tvSafetyTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Make your trip safety first"
-                android:textColor="@color/gray_900"
-                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Safe Journey Guaranteed"
+                android:textColor="#0F172A"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toStartOf="@id/ivArrow"
                 app:layout_constraintStart_toEndOf="@id/ivShield"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -51,8 +63,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Check how make our customer is more safety"
-                android:textColor="@color/gray_500"
+                android:text="Explore our safety features and protocols"
+                android:textColor="#64748B"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@id/ivArrow"
                 app:layout_constraintStart_toStartOf="@id/tvSafetyTitle"
@@ -60,52 +72,68 @@
 
             <ImageView
                 android:id="@+id/ivArrow"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_arrow_forward"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/gray_900" />
+                app:tint="#CBD5E1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Bottom Search Sheet - More Professional -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="16dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="32dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.GoRide.BottomSheet"
         app:strokeWidth="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp">
+            android:paddingHorizontal="24dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="40dp">
+
+            <!-- Handlebar -->
+            <View
+                android:id="@+id/viewHandle"
+                android:layout_width="48dp"
+                android:layout_height="4dp"
+                android:background="#E2E8F0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Where are you going\ntoday?"
-                android:textColor="#001B3D"
-                android:textSize="22sp"
-                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Where to, today?"
+                android:textColor="#0F172A"
+                android:textSize="26sp"
+                android:letterSpacing="-0.02"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/viewHandle" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/searchBar"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="24dp"
-                app:cardBackgroundColor="@color/gray_100"
-                app:cardCornerRadius="27dp"
+                app:cardBackgroundColor="#F8FAFC"
+                app:cardCornerRadius="16dp"
                 app:layout_constraintTop_toBottomOf="@id/tvGreeting"
-                app:strokeWidth="0dp">
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -114,20 +142,22 @@
 
                     <ImageView
                         android:id="@+id/ivSearch"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         android:src="@drawable/ic_search"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/gray_500" />
+                        app:tint="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Search destinations"
-                        android:textColor="@color/gray_500"
+                        android:layout_marginStart="14dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Enter destination..."
+                        android:textColor="#94A3B8"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/ivSearch"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -135,13 +165,28 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <TextView
+                android:id="@+id/tvRecentHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-bold"
+                android:text="Recent Destinations"
+                android:textColor="#64748B"
+                android:textSize="13sp"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchBar" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecentLocations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/searchBar"
-                tools:itemCount="3"
+                android:layout_marginTop="12dp"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/tvRecentHeader"
+                tools:itemCount="2"
                 tools:listitem="@layout/item_recent_location" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

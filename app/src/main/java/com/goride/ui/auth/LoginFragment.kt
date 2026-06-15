@@ -66,8 +66,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun observeViewModel() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.root.findViewById<View>(R.id.loadingLayout)?.visibility =
-                if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingLayout.root.visibility = if (isLoading) View.VISIBLE else View.GONE
             binding.btnLogin.isEnabled = !isLoading
         }
 

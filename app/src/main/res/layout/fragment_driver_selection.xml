@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_100">
+    android:background="#F8FAFC">
 
-    <!-- ── Top AppBar ────────────────────────────────────────────────────── -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:navigationIconTint="@color/gray_900"
-        app:title="Available Drivers"
-        app:titleTextColor="@color/gray_900"
-        app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+        app:elevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- ── Searching state ────────────────────────────────────────────────── -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="#0F172A"
+            app:title="Available Drivers"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+            app:titleTextColor="#0F172A" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:id="@+id/llSearching"
         android:layout_width="0dp"
@@ -32,7 +37,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="64dp"
@@ -40,41 +45,43 @@
             android:indeterminate="true"
             app:indicatorColor="@color/primary"
             app:indicatorSize="64dp"
-            app:trackColor="@color/gray_200"
-            app:trackThickness="4dp" />
+            app:trackColor="#F1F5F9"
+            app:trackThickness="6dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif-black"
             android:text="Searching nearby drivers..."
-            android:textColor="@color/gray_700"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="#0F172A"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Please wait a moment"
-            android:textColor="@color/gray_500"
-            android:textSize="13sp" />
+            android:textColor="#64748B"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-    <!-- ── Drivers RecyclerView ───────────────────────────────────────────── -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDrivers"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="16dp"
-        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        tools:listitem="@layout/item_driver" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
