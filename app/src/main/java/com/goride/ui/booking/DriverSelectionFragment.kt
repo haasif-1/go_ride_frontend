@@ -91,7 +91,11 @@ class DriverSelectionFragment : Fragment() {
                         destinationLat = args.destinationLat,
                         destinationLng = args.destinationLng
                     )
-                findNavController().navigate(action)
+                try {
+                    findNavController().navigate(action)
+                } catch (e: Exception) {
+                    // Ignore duplicate navigation calls
+                }
             }
         }
     }

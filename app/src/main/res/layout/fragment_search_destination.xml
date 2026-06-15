@@ -130,6 +130,27 @@
         app:layout_constraintTop_toBottomOf="@id/tvRecentHeader"
         tools:listitem="@layout/item_recent_place" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@id/btnContinue"
+        app:layout_constraintTop_toBottomOf="@id/cardInputs">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchResults"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:listitem="@layout/item_search_result" />
+    </com.google.android.material.card.MaterialCardView>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"

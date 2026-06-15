@@ -63,6 +63,12 @@ class BookingSuccessFragment : BaseFragment<FragmentBookingSuccessBinding>() {
                 )
             findNavController().navigate(action)
         }
+
+        binding.btnCancelRide.setOnClickListener {
+            findNavController().navigate(
+                BookingSuccessFragmentDirections.actionBookingSuccessFragmentToHomeFragment()
+            )
+        }
     }
 
     // ── Private helpers ─────────────────────────────────────────────────────────

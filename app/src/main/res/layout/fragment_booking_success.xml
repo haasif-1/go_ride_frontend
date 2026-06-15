@@ -139,13 +139,153 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <include layout="@layout/layout_ride_detail_row" tools:text="Ride ID" tools:value="#12345" />
+                <!-- Ride ID Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ride ID"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvRideId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" />
-                <include layout="@layout/layout_ride_detail_row" tools:text="Status" tools:value="Confirmed" />
+
+                <!-- Status Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Status"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#22C55E"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" />
-                <include layout="@layout/layout_ride_detail_row" tools:text="Type" tools:value="Premium" />
+
+                <!-- Vehicle Type Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Vehicle Type"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvVehicleType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" />
-                <include layout="@layout/layout_ride_detail_row" tools:text="Fare" tools:value="$ 12.50" />
+
+                <!-- Fare Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fare"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvFare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" />
+
+                <!-- Distance Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Distance"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F1F5F9" />
+
+                <!-- Duration Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Duration"
+                        android:textColor="#64748B"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tvDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -162,6 +302,21 @@
             android:textSize="18sp"
             app:cornerRadius="16dp"
             app:layout_constraintTop_toBottomOf="@id/cardRideDetails" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelRide"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:fontFamily="sans-serif-black"
+            android:text="Cancel Ride"
+            android:textAllCaps="false"
+            android:textColor="@color/error"
+            android:textSize="18sp"
+            app:cornerRadius="16dp"
+            app:layout_constraintTop_toBottomOf="@id/btnTrackDriver"
+            app:strokeColor="@color/error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

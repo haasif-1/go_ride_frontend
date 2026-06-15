@@ -39,6 +39,7 @@ class DriverAdapter(
                 tvFareBadge.text = "Rs. ${driver.fare.toInt()}"
 
                 btnSelectDriver.setOnClickListener {
+                    it.isEnabled = false
                     onDriverSelected(driver)
                 }
             }

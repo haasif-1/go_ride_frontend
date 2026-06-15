@@ -280,15 +280,19 @@
             app:argType="string" />
         <argument
             android:name="pickupLat"
+            android:defaultValue="0.0"
             app:argType="string" />
         <argument
             android:name="pickupLng"
+            android:defaultValue="0.0"
             app:argType="string" />
         <argument
             android:name="destinationLat"
+            android:defaultValue="0.0"
             app:argType="string" />
         <argument
             android:name="destinationLng"
+            android:defaultValue="0.0"
             app:argType="string" />
         <action
             android:id="@+id/action_bookingSuccessFragment_to_driverTrackingFragment"

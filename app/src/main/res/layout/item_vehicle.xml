@@ -38,6 +38,23 @@
             app:layout_constraintStart_toEndOf="@id/ivVehicle"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tvPopular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#FDE68A"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:text="Popular"
+            android:textColor="#92400E"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tvVehicleName"
+            app:layout_constraintStart_toEndOf="@id/tvVehicleName"
+            app:layout_constraintTop_toTopOf="@id/tvVehicleName"
+            tools:visibility="visible" />
+
         <LinearLayout
             android:id="@+id/infoLayout"
             android:layout_width="wrap_content"
@@ -69,6 +86,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4 Seats"
+                android:textColor="#64748B"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/circle_gray"
+                android:backgroundTint="#CBD5E1" />
+
+            <TextView
+                android:id="@+id/tvEta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 min"
                 android:textColor="#64748B"
                 android:textSize="12sp" />
         </LinearLayout>
