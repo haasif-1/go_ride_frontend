@@ -129,15 +129,24 @@ class VehicleSelectionFragment : BaseFragment<FragmentVehicleSelectionBinding>()
 
         viewModel.rideBookingResult.observe(viewLifecycleOwner) { result ->
             result.onSuccess { rideData ->
+                // Use the fare the user actually sees on the vehicle card,
+                // not the raw API fare (which may be a backend base amount
+                // unrelated to the distance-adjusted price shown on screen).
+                val displayedFare = selectedVehicle?.price
+                    ?.replace("Rs.", "", ignoreCase = true)
+                    ?.trim()
+                    ?.toFloatOrNull()
+                    ?: rideData.fare.toFloat()
+
                 val action = VehicleSelectionFragmentDirections
                     .actionVehicleSelectionFragmentToDriverSelectionFragment(
-                        rideId = rideData.id,
+                        rideId      = rideData.id,
                         vehicleType = rideData.vehicleType,
-                        fare = rideData.fare.toFloat(),
-                        distance = rideData.distance.toFloat(),
-                        duration = rideData.duration,
-                        pickupLat = args.pickupLat,
-                        pickupLng = args.pickupLng,
+                        fare        = displayedFare,
+                        distance    = rideData.distance.toFloat(),
+                        duration    = rideData.duration,
+                        pickupLat   = args.pickupLat,
+                        pickupLng   = args.pickupLng,
                         destinationLat = args.destinationLat,
                         destinationLng = args.destinationLng
                     )
