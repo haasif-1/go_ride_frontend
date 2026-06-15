@@ -19,7 +19,7 @@ object DriverPool {
             vehicle     = "Toyota Corolla",
             plateNumber = "LHR-2341",
             etaMinutes  = 3,
-            fare        = (base - 10f).coerceAtLeast(50f)
+            fare        = round5(base * 0.95f)      // ~5% cheaper
         ),
         DriverModel(
             name        = "Bilal Raza",
@@ -27,7 +27,7 @@ object DriverPool {
             vehicle     = "Honda City",
             plateNumber = "LHR-5567",
             etaMinutes  = 5,
-            fare        = base
+            fare        = round5(base)               // exact base
         ),
         DriverModel(
             name        = "Usman Ali",
@@ -35,7 +35,7 @@ object DriverPool {
             vehicle     = "Toyota Yaris",
             plateNumber = "LHR-3390",
             etaMinutes  = 4,
-            fare        = (base + 15f)
+            fare        = round5(base * 1.05f)      // ~5% more
         ),
         DriverModel(
             name        = "Faisal Sheikh",
@@ -43,7 +43,7 @@ object DriverPool {
             vehicle     = "Honda Civic",
             plateNumber = "LHR-7723",
             etaMinutes  = 6,
-            fare        = (base - 5f).coerceAtLeast(50f)
+            fare        = round5(base * 0.97f)      // ~3% cheaper
         ),
         DriverModel(
             name        = "Tariq Mehmood",
@@ -51,7 +51,7 @@ object DriverPool {
             vehicle     = "Suzuki Cultus",
             plateNumber = "LHR-9912",
             etaMinutes  = 2,
-            fare        = (base + 20f)
+            fare        = round5(base * 1.08f)      // ~8% more (premium driver)
         )
     )
 
@@ -64,7 +64,7 @@ object DriverPool {
             vehicle     = "Suzuki Alto",
             plateNumber = "LHR-4421",
             etaMinutes  = 4,
-            fare        = (base - 15f).coerceAtLeast(50f)
+            fare        = round5(base * 0.94f)      // ~6% cheaper
         ),
         DriverModel(
             name        = "Rashid Hussain",
@@ -72,7 +72,7 @@ object DriverPool {
             vehicle     = "Suzuki Wagon R",
             plateNumber = "LHR-6634",
             etaMinutes  = 6,
-            fare        = base
+            fare        = round5(base)               // exact base
         ),
         DriverModel(
             name        = "Imran Butt",
@@ -80,7 +80,7 @@ object DriverPool {
             vehicle     = "Suzuki Swift",
             plateNumber = "LHR-1187",
             etaMinutes  = 3,
-            fare        = (base + 10f)
+            fare        = round5(base * 1.06f)      // ~6% more
         ),
         DriverModel(
             name        = "Kamran Zafar",
@@ -88,7 +88,7 @@ object DriverPool {
             vehicle     = "Daihatsu Cuore",
             plateNumber = "LHR-8856",
             etaMinutes  = 7,
-            fare        = (base - 10f).coerceAtLeast(50f)
+            fare        = round5(base * 0.97f)      // ~3% cheaper
         ),
         DriverModel(
             name        = "Sohail Akhtar",
@@ -96,7 +96,7 @@ object DriverPool {
             vehicle     = "Suzuki Mehran",
             plateNumber = "LHR-3302",
             etaMinutes  = 5,
-            fare        = (base + 5f)
+            fare        = round5(base * 1.03f)      // ~3% more
         )
     )
 
@@ -109,7 +109,7 @@ object DriverPool {
             vehicle     = "Toyota Fortuner",
             plateNumber = "LHR-1122",
             etaMinutes  = 5,
-            fare        = (base - 20f).coerceAtLeast(100f)
+            fare        = round5(base * 0.96f)      // ~4% cheaper
         ),
         DriverModel(
             name        = "Hassan Mirza",
@@ -117,7 +117,7 @@ object DriverPool {
             vehicle     = "Hyundai Tucson",
             plateNumber = "LHR-7745",
             etaMinutes  = 7,
-            fare        = base
+            fare        = round5(base)               // exact base
         ),
         DriverModel(
             name        = "Asad Qureshi",
@@ -125,7 +125,7 @@ object DriverPool {
             vehicle     = "KIA Sportage",
             plateNumber = "LHR-5531",
             etaMinutes  = 4,
-            fare        = (base + 25f)
+            fare        = round5(base * 1.06f)      // ~6% more
         ),
         DriverModel(
             name        = "Omar Farooq",
@@ -133,7 +133,7 @@ object DriverPool {
             vehicle     = "Toyota Prado",
             plateNumber = "LHR-9901",
             etaMinutes  = 8,
-            fare        = (base + 50f)
+            fare        = round5(base * 1.10f)      // ~10% more (luxury)
         ),
         DriverModel(
             name        = "Salman Chaudhry",
@@ -141,7 +141,12 @@ object DriverPool {
             vehicle     = "Honda CR-V",
             plateNumber = "LHR-4478",
             etaMinutes  = 6,
-            fare        = (base - 10f).coerceAtLeast(100f)
+            fare        = round5(base * 0.98f)      // ~2% cheaper
         )
     )
+
+    /** Round to the nearest 5 Rs for a clean, realistic look. */
+    private fun round5(value: Float): Float {
+        return (Math.round(value / 5.0) * 5).toFloat()
+    }
 }

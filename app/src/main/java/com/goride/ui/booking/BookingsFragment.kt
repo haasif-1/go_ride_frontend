@@ -3,82 +3,65 @@ package com.goride.ui.booking
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.goride.R
 import com.goride.base.BaseFragment
-import com.goride.data.api.RetrofitClient
-import com.goride.data.repository.RideHistoryRepository
+import com.goride.data.repository.BookingHistoryManager
 import com.goride.databinding.FragmentBookingsBinding
 
+/**
+ * Displays booking history loaded from local SharedPreferences storage.
+ * No network calls are made — data is written by [BookingSuccessFragment]
+ * each time a user completes a ride booking.
+ */
 class BookingsFragment : BaseFragment<FragmentBookingsBinding>() {
 
-    private val viewModel: RideHistoryViewModel by viewModels {
-        RideHistoryViewModelFactory(RideHistoryRepository(RetrofitClient.apiService))
-    }
-
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentBookingsBinding {
-        return FragmentBookingsBinding.inflate(inflater, container, false)
-    }
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentBookingsBinding =
+        FragmentBookingsBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        setupRecyclerView()
-        setupListeners()
-        observeViewModel()
-        viewModel.fetchRideData()
+        // Active-ride card is driven by API — hide it for local-only mode
+        binding.cardActiveRide.visibility = View.GONE
+
+        loadBookingHistory()
     }
 
-    private fun setupRecyclerView() {
+    override fun onResume() {
+        super.onResume()
+        // Refresh list every time the screen is re-entered so a newly
+        // completed booking appears immediately without restarting the app.
+        loadBookingHistory()
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
+
+    private fun loadBookingHistory() {
+        val bookings = BookingHistoryManager(requireContext()).getBookings()
+
+        if (bookings.isEmpty()) {
+            showEmptyState()
+        } else {
+            showBookings(bookings)
+        }
+    }
+
+    private fun showEmptyState() {
+        binding.scrollView.visibility                           = View.GONE
+        binding.root.findViewById<View>(R.id.emptyLayout)?.visibility  = View.VISIBLE
+        binding.root.findViewById<View>(R.id.errorLayout)?.visibility  = View.GONE
+        binding.root.findViewById<View>(R.id.loadingLayout)?.visibility = View.GONE
+    }
+
+    private fun showBookings(bookings: List<com.goride.data.models.LocalBookingRecord>) {
+        binding.root.findViewById<View>(R.id.emptyLayout)?.visibility  = View.GONE
+        binding.root.findViewById<View>(R.id.errorLayout)?.visibility  = View.GONE
+        binding.root.findViewById<View>(R.id.loadingLayout)?.visibility = View.GONE
+        binding.scrollView.visibility = View.VISIBLE
+
         binding.rvRideHistory.layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun setupListeners() {
-        binding.root.findViewById<View>(R.id.btnRetry)?.setOnClickListener {
-            viewModel.fetchRideData()
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.root.findViewById<View>(R.id.loadingLayout)?.visibility =
-                if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        viewModel.activeRide.observe(viewLifecycleOwner) { result ->
-            result.onSuccess { ride ->
-                if (ride != null) {
-                    binding.cardActiveRide.visibility = View.VISIBLE
-                    // driverName returns null in current API — shows "Searching..."
-                    binding.tvActiveDriver.text = "Driver: ${ride.driverName ?: "Searching..."}"
-                    binding.tvActiveStatus.text = ride.status
-                    // pickupAddress / destinationAddress are coordinate strings until
-                    // the backend adds reverse-geocoded address fields
-                    binding.tvActivePickup.text = "Pickup: ${ride.pickupAddress}"
-                    binding.tvActiveDest.text   = "Drop: ${ride.destinationAddress}"
-                } else {
-                    binding.cardActiveRide.visibility = View.GONE
-                }
-            }.onFailure {
-                binding.cardActiveRide.visibility = View.GONE
-            }
-        }
-
-        viewModel.rideHistory.observe(viewLifecycleOwner) { result ->
-            result.onSuccess { history ->
-                binding.root.findViewById<View>(R.id.errorLayout)?.visibility = View.GONE
-                if (history.isEmpty()) {
-                    binding.root.findViewById<View>(R.id.emptyLayout)?.visibility = View.VISIBLE
-                    binding.scrollView.visibility = View.GONE
-                } else {
-                    binding.root.findViewById<View>(R.id.emptyLayout)?.visibility = View.GONE
-                    binding.scrollView.visibility = View.VISIBLE
-                    binding.rvRideHistory.adapter = RideHistoryAdapter(history)
-                }
-            }.onFailure {
-                binding.root.findViewById<View>(R.id.errorLayout)?.visibility = View.VISIBLE
-                binding.root.findViewById<View>(R.id.emptyLayout)?.visibility = View.GONE
-                binding.scrollView.visibility = View.GONE
-            }
-        }
+        binding.rvRideHistory.adapter       = LocalBookingAdapter(bookings)
     }
 }

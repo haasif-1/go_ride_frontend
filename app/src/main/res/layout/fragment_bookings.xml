@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="#F8FAFC">
 
     <TextView
         android:id="@+id/tvTitle"
-        style="@style/TextAppearance.GoRide.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="My Bookings"
+        android:fontFamily="sans-serif-black"
+        android:text="Activity"
+        android:textColor="#0F172A"
+        android:textSize="28sp"
+        android:letterSpacing="-0.02"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,6 +24,8 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
@@ -28,18 +33,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="24dp">
 
-            <!-- Active Ride Card -->
+            <!-- Active Ride Card - Elevated Design -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardActiveRide"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="32dp"
                 android:visibility="gone"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="4dp"
-                app:strokeColor="@color/primary"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:strokeColor="#DCFCE7"
                 app:strokeWidth="1dp"
                 tools:visibility="visible">
 
@@ -47,58 +54,96 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Active Ride"
-                        android:textColor="@color/primary"
-                        android:textStyle="bold" />
-
-                    <View
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginVertical="12dp"
-                        android:background="@color/gray_100" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-bold"
+                            android:text="Current Ride"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:textAllCaps="true"
+                            android:letterSpacing="0.1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvActiveStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_status_badge"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="ON THE WAY"
+                            android:textColor="@color/primary"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/tvActiveDriver"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Driver: Loading..."
-                        android:textColor="@color/gray_900"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="sans-serif-black"
+                        android:text="Johnathan Doe"
+                        android:textColor="#0F172A"
+                        android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/tvActiveStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:background="@color/primary_light"
-                        android:paddingHorizontal="8dp"
-                        android:paddingVertical="2dp"
-                        android:text="ACCEPTED"
-                        android:textColor="@color/primary"
-                        android:textSize="12sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="16dp"
+                        android:background="#F1F5F9" />
 
-                    <TextView
-                        android:id="@+id/tvActivePickup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Pickup: Loading..."
-                        android:textColor="@color/gray_700"
-                        android:textSize="14sp" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tvActiveDest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Drop: Loading..."
-                        android:textColor="@color/gray_700"
-                        android:textSize="14sp" />
+                        <ImageView
+                            android:id="@+id/ivRouteIcon"
+                            android:layout_width="16dp"
+                            android:layout_height="54dp"
+                            android:src="@drawable/ic_route_indicator"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvActivePickup"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="Loading pickup address..."
+                            android:textColor="#475569"
+                            android:textSize="14sp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/ivRouteIcon"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvActiveDest"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="18dp"
+                            android:text="Loading destination address..."
+                            android:textColor="#0F172A"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            app:layout_constraintBottom_toBottomOf="@id/ivRouteIcon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/tvActivePickup" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -108,22 +153,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Ride History"
-                android:textColor="@color/gray_900"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-black"
+                android:text="Recent Rides"
+                android:textColor="#0F172A"
+                android:textSize="20sp"
+                android:letterSpacing="-0.01" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRideHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_ride_history" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <include layout="@layout/layout_empty_state" />
-    <include layout="@layout/layout_error" />
-    <include layout="@layout/layout_loading" />
+    <include
+        android:id="@+id/layoutEmpty"
+        layout="@layout/layout_empty_state"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layoutError"
+        layout="@layout/layout_error"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/layout_loading"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

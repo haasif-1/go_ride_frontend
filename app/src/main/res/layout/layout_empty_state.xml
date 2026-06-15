@@ -5,45 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="24dp"
+    android:padding="32dp"
     android:visibility="gone">
 
-    <ImageView
-        android:id="@+id/ivEmpty"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/ic_bookings"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/ivEmptyContainer"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:cardBackgroundColor="#F8FAFC"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#F1F5F9"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@+id/tvEmptyTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:tint="@color/gray_200" />
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <ImageView
+            android:id="@+id/ivEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="32dp"
+            android:src="@drawable/ic_bookings"
+            app:tint="@color/primary"
+            android:alpha="0.2" />
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/tvEmptyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Nothing here yet"
-        android:textColor="@color/gray_900"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif-black"
+        android:text="No activity yet"
+        android:textColor="#0F172A"
+        android:textSize="22sp"
+        android:letterSpacing="-0.01"
         app:layout_constraintBottom_toTopOf="@+id/tvEmptyDesc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivEmpty" />
+        app:layout_constraintTop_toBottomOf="@id/ivEmptyContainer" />
 
     <TextView
         android:id="@+id/tvEmptyDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="You haven't made any bookings yet. Start your first journey today!"
-        android:textColor="@color/gray_500"
+        android:lineSpacingExtra="4sp"
+        android:text="Your trip history will appear here once you complete your first ride with us."
+        android:textColor="#64748B"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEmptyTitle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEmptyAction"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:text="Book a Ride"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif-bold"
+        android:paddingHorizontal="32dp"
+        app:cornerRadius="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEmptyDesc"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
