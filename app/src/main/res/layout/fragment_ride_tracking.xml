@@ -95,8 +95,17 @@
                 android:text="Ride #--"
                 android:textColor="#64748B"
                 android:textSize="13sp" />
+            <TextView
+                android:id="@+id/tvVehicleType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Premium"
+                android:textColor="#64748B"
+                android:textSize="13sp" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDriverInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -233,6 +242,16 @@
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:textColor="#F44336"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Unable to fetch ride details" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnBackHome"

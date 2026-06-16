@@ -75,7 +75,7 @@ class RideTrackingFragment : BaseFragment<FragmentRideTrackingBinding>() {
 
         // ── Terminal status: show "Back to Home" and hide loading ─────────
         if (status == "COMPLETED" || status == "CANCELLED") {
-            binding.loadingLayout.visibility = View.GONE
+            binding.loadingLayout.root.visibility = View.GONE
             binding.btnBackHome.visibility   = View.VISIBLE
             binding.btnBackHome.setOnClickListener {
                 findNavController().navigate(

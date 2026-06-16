@@ -96,12 +96,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:text="Fetching location..."
                 android:textColor="#64748B"
                 android:textSize="13sp"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintBottom_toTopOf="@id/tvDestLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvPickupLabel"
-                app:layout_constraintTop_toBottomOf="@id/tvPickupLabel" />
+                app:layout_constraintTop_toBottomOf="@id/tvPickupLabel"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tvDestLabel"
@@ -120,11 +125,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:textColor="#64748B"
                 android:textSize="13sp"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
                 app:layout_constraintEnd_toStartOf="@+id/tvDistance"
                 app:layout_constraintStart_toStartOf="@id/tvDestLabel"
-                app:layout_constraintTop_toBottomOf="@id/tvDestLabel" />
+                app:layout_constraintTop_toBottomOf="@id/tvDestLabel"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/tvDistance"

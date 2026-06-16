@@ -26,12 +26,12 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding>() {
             OnboardingItem(
                 "Ride Anytime, Anywhere",
                 "Book a ride in seconds and get picked up wherever you are. Fast, reliable transportation at your fingertips.",
-                R.drawable.ic_launcher_foreground // Placeholder
+                R.drawable.goride
             ),
             OnboardingItem(
                 "Safe, Smart & Accessible",
                 "Choose the ride that fits your needs — including wheelchair-accessible vehicles — with secure payments and transparent pricing.",
-                R.drawable.ic_launcher_foreground // Placeholder
+                R.drawable.goride
             )
         )
 

@@ -1,7 +1,7 @@
 package com.goride.utils
 
 object Constants {
-    const val BASE_URL = "http://192.168.0.102:8000/"
+    const val BASE_URL = "http://192.168.100.212:8000/"
     const val DATASTORE_NAME = "goride_prefs"
     
     // API Endpoints

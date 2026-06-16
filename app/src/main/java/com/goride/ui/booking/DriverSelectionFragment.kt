@@ -40,7 +40,9 @@ class DriverSelectionFragment : Fragment() {
 
     private fun setupUI() {
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            if (!findNavController().popBackStack()) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 

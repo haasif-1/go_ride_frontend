@@ -110,6 +110,8 @@ class DriverTrackingFragment : BaseFragment<FragmentDriverTrackingBinding>(), On
         }
 
         binding.btnCancelRide.setOnClickListener {
+            movementJob?.cancel()
+            statusJob?.cancel()
             // Navigate to Home and clear back stack as defined in nav_graph.xml action
             findNavController().navigate(
                 DriverTrackingFragmentDirections.actionDriverTrackingFragmentToHomeFragment()
@@ -123,6 +125,7 @@ class DriverTrackingFragment : BaseFragment<FragmentDriverTrackingBinding>(), On
                     binding.btnCompleteRide.isEnabled = false
                     binding.tvEta.text = "Ride In Progress"
                     binding.btnCompleteRide.text = "Finish Ride"
+                    binding.btnCancelRide.visibility = View.GONE
                     startRideSimulation()
                 }
                 2 -> showRatingBottomSheet()
@@ -252,7 +255,10 @@ class DriverTrackingFragment : BaseFragment<FragmentDriverTrackingBinding>(), On
                 val currentLatLng = interpolateLatLng(path, progress)
                 val pathIndex = (progress * (path.size - 1)).toInt()
 
-                drawRouteProgress(pathIndex)
+                // Throttle route redraw to every 5 frames or the last frame to reduce blinking
+                if (frame % 5 == 0 || frame == totalFrames) {
+                    drawRouteProgress(pathIndex)
+                }
                 updateDriverPosition(currentLatLng, followCamera)
                 delay(frameDelay)
             }
